@@ -1,3 +1,7 @@
+require 'action_serializer/base'
+require 'action_serializer/model'
+require 'action_serializer/collection'
+
 module ActionSerializer
   extend ActiveSupport::Concern
 
@@ -9,9 +13,9 @@ module ActionSerializer
 
   def serialize(object, serializer = nil)
     if object.is_a?(Array) || object.class.name == 'ActiveRecord::Relation'
-      @coll = SerializedCollection.new(object, serializer)
+      @coll = ActionSerializer::Collection.new(object, serializer)
     else
-      @item = SerializedModel.create(object, serializer)
+      @item = ActionSerializer::Model.create(object, serializer)
     end
   end
 end
