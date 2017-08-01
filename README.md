@@ -3,7 +3,7 @@
 ActionSerializer is a layer for Rails between Controller and View. 
 It's an implementation of new architecture which can be called MVCS (Model-View-Controller-Serializer):
 
-![mvcs](https://photos-3.dropbox.com/t/2/AABkdEMTI7RNXgKqKeZXpzAV2vdgWXUzXvNsdnKhAPjlQA/12/14907920/png/32x32/1/_/1/2/MVC%20to%20MVCS.png/ELb9iwsYv7coIAcoBw/YMe_PehOKBqrmN0hyUy4EFWKw3s2UTuU4YJ5keuc30s?size=32x32&size_mode=3)
+![mvcs](https://photos-3.dropbox.com/t/2/AABkdEMTI7RNXgKqKeZXpzAV2vdgWXUzXvNsdnKhAPjlQA/12/14907920/png/32x32/1/_/1/2/MVC%20to%20MVCS.png/ELb9iwsYv7coIAcoBw/YMe_PehOKBqrmN0hyUy4EFWKw3s2UTuU4YJ5keuc30s?size=32x32&size_mode=5)
 
 It introduces a standard place for a view-related logic and 
 makes it easier to move your UI to frontend frameworks in future if you decide so.
