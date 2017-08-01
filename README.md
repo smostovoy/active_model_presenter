@@ -1,29 +1,51 @@
 # Welcome to ActionSerializer
 
 ActionSerializer is a layer for Rails between Controller and View. 
-It's an implementation of new architecture which can be called MVCS (Model-View-Controller-Serializer):
+It's an implementation of an architecture which can be called as MVCS (Model-View-Controller-Serializer).
+Simplified flow is next:
 
-![mvcs](https://photos-3.dropbox.com/t/2/AABkdEMTI7RNXgKqKeZXpzAV2vdgWXUzXvNsdnKhAPjlQA/12/14907920/png/32x32/1/_/1/2/MVC%20to%20MVCS.png/ELb9iwsYv7coIAcoBw/YMe_PehOKBqrmN0hyUy4EFWKw3s2UTuU4YJ5keuc30s?size=32x32&size_mode=5)
+![mvcs](/doc/mvc-to-mvcs.png)
 
-It introduces a standard place for a view-related logic and 
-makes it easier to move your UI to frontend frameworks in future if you decide so.
-Serialized item supports methods required by Rails form so it's a drop-in replacement for a model.
+### Benefits:
+1. Standart place for a view-related logic
+2. View data goes in 1 direction, like in API -> Frontend SPA app.
+3. Easy caching, testing, re-usage, extending
+4. Based on time-tested Active Model Serializers
+5. Acts like a plain ruby object but has a `to_h` and `to_json` methods
+
 
 ## Getting Started
 
-1. Add gem to you Bundle
-
-        gem 'action_serializer'
-
+1. Add gem to you Gemfile
+    
+    ```ruby
+    gem 'action_serializer'
+    ```
+ 
 2. Call `serialize` in your action
+    
+    ```ruby
+    def show  
+      user = User.find(params[:id])
+      @user = serialize(user)
+    end  
+    ```
+   By default, serializer class name is `model name + "Serializer"`, same as in AMS. But you can pass it as an option:
+   
+   ```ruby
+   @user = serialize(user, UserSerializer)
+   ```
 
-        user = User.find(1)
-        @user = serialize(user, UserSerializer)
+   Collections are handled same way.
+   
+   ```ruby
+   @users = serialize(users)
+   ```  
+        
+   Pagination is compatible with `will_paginate` and `kaminari`
+       
 
-   Serializer class is optional. By default serializer creates `@item` or `@coll` variables.
-
-3. Change View forms to explicitly pass URL
-
+Check out also [Active Model Serializers](https://github.com/rails-api/active_model_serializers/tree/v0.10.6) page for more information.
 
 ## Contributing
 

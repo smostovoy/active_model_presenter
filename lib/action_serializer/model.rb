@@ -10,7 +10,7 @@ module ActionSerializer
     end
 
     def is_a?(klass)
-      return false if klass == Hash
+      return false if klass == Hash # Rails Form treats hashes differently from models
       super
     end
 
