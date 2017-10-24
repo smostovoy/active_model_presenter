@@ -1,6 +1,6 @@
 # Welcome to ActionSerializer
 
-ActionSerializer is a layer for Rails between Controller and View based on ActiveModelSerializers gem. 
+ActionSerializer is a layer for Rails between Controller and View based on ActiveModelSerializer gem. 
 It's an implementation of an architecture which can be called as MVCS (Model-View-Controller-Serializer).
 Simplified flow is next:
 
@@ -32,14 +32,10 @@ Simplified flow is next:
     ```ruby
     def show  
       user = User.find(params[:id])
-      @user = serialize(user)
+      @user = serialize(user, UserSerializer)
     end  
     ```
-   By default, serializer class name is `model name + "Serializer"`, same as in AMS. But you can pass it as an option:
-   
-   ```ruby
-   @user = serialize(user, UserSerializer)
-   ```
+
    Method `serialize` returns `ActionSerializer::Model` object, which is compatible with rails forms  
 
    Collections are handled same way.
@@ -71,7 +67,7 @@ Method `serialize` does all the magic
  end
 ``` 
 
-Serializers a default Active Model Serializers 
+Serializers a default ActiveModelSerializer classes 
 ```ruby
  # /app/serializers/post_serializer.rb
  class PostSerializer < ActionSerializer::Base
