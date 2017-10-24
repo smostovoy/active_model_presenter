@@ -1,6 +1,6 @@
 # Welcome to ActionSerializer
 
-ActionSerializer is a layer for Rails between Controller and View. 
+ActionSerializer is a layer for Rails between Controller and View based on ActiveModelSerializers gem. 
 It's an implementation of an architecture which can be called as MVCS (Model-View-Controller-Serializer).
 Simplified flow is next:
 
@@ -8,10 +8,15 @@ Simplified flow is next:
 
 ### Benefits:
 1. Standart place for a view-related logic
-2. View data goes in 1 direction, like in API -> Frontend SPA app.
-3. Easy caching, testing, re-usage, extending, performance control
-4. Based on time-tested Active Model Serializers
-5. Acts like a plain ruby object but has a `to_h` and `to_json` methods
+2. View layer does not make DB queries. Data goes in 1 direction, like in API -> Frontend SPA app.
+3. Easy caching - just add `cache: true` in your serializer 
+4. Better testing - checking controller assings (full hash) gives much higher confidence
+5. DRY - Default AMS serializers support `has_many`, `belongs_to` and simple inheritance
+
+### Features
+1. Serialized object acts like a plain ruby object but can be converted to hash or json
+2. Based on time-tested AMS gem
+3. Compatible with default rails form helpers
 
 
 ## Getting Started
@@ -46,7 +51,7 @@ Simplified flow is next:
    Here `serialize` returns `ActionSerializer::Collection` object, which is compatible with pagination from `will_paginate` and `kaminari` gems.
        
 
-Check out also [Active Model Serializers](https://github.com/rails-api/active_model_serializers/tree/v0.10.6) page for more information.
+Check out also [Active Model Serializers](https://github.com/rails-api/active_model_serializers/tree/v0.10.6) page about syntax for serializers.
 
 ## Example
 
@@ -89,7 +94,7 @@ Serializers a default Active Model Serializers
  end   
 ```
 
-Views for show/index are same as default ones.
+Views for show/index are same as default ones, but it can access only defined attributes.
 ```html
  # /app/views/posts/show.html.erb
 
