@@ -9,7 +9,7 @@ Simplified flow is next:
 ### Benefits:
 1. Standart place for a view-related logic
 2. View data goes in 1 direction, like in API -> Frontend SPA app.
-3. Easy caching, testing, re-usage, extending
+3. Easy caching, testing, re-usage, extending, performance control
 4. Based on time-tested Active Model Serializers
 5. Acts like a plain ruby object but has a `to_h` and `to_json` methods
 
@@ -46,6 +46,56 @@ Simplified flow is next:
        
 
 Check out also [Active Model Serializers](https://github.com/rails-api/active_model_serializers/tree/v0.10.6) page for more information.
+
+## Example
+
+```ruby
+
+ # /app/controllers/posts_controller.rb
+ class PostsController < ApplicationController
+   def show  
+     post = Post.find(params[:id])
+     @post = serialize(post)
+   end
+ end
+ 
+ # /app/serializers/post_serializer.rb
+ class PostSerializer < ActionSerializer::Base
+   attributes :id, :title, :content, :author_name
+     
+   has_many :comments
+     
+   def author_name
+     object.user.name
+   end
+ end 
+ 
+ # /app/serializers/comment_serializer.rb
+ class CommentSerializer < ActionSerializer::Base
+   attributes :id, :message, :author_name
+     
+   def author_name
+     object.user.name
+   end
+ end   
+```
+
+```html
+ # /app/views/posts/show.html.erb
+
+<h1><%= @post.title %></h1>
+<h2><%= @post.author_name %></h2>
+<div><%= @post.content %></div>
+
+<div>
+    <% @post.comments.each do |comment| %>
+      <div>
+        <div><%= comment.author_name %></div>
+        <div><%= comment.message %></div>
+      </div>  
+    <% end %>
+</div>
+```
 
 ## Contributing
 

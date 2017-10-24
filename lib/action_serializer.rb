@@ -1,3 +1,6 @@
+require 'active_model_serializers'
+require 'hashie'
+
 require 'action_serializer/base'
 require 'action_serializer/model'
 require 'action_serializer/collection'

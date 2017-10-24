@@ -12,3 +12,4 @@ rdoc
 spec/reports
 tmp
 bin
+coverage
