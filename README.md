@@ -35,20 +35,22 @@ Simplified flow is next:
    ```ruby
    @user = serialize(user, UserSerializer)
    ```
+   Method `serialize` returns `ActionSerializer::Model` object, which is compatible with rails forms  
 
    Collections are handled same way.
    
    ```ruby
    @users = serialize(users)
    ```  
-        
-   Pagination is compatible with `will_paginate` and `kaminari`
+     
+   Here `serialize` returns `ActionSerializer::Collection` object, which is compatible with pagination from `will_paginate` and `kaminari` gems.
        
 
 Check out also [Active Model Serializers](https://github.com/rails-api/active_model_serializers/tree/v0.10.6) page for more information.
 
 ## Example
 
+Method `serialize` does all the magic
 ```ruby
  # /app/controllers/posts_controller.rb
  class PostsController < ApplicationController
@@ -62,7 +64,10 @@ Check out also [Active Model Serializers](https://github.com/rails-api/active_mo
      @post = serialize(post)
    end
  end
- 
+``` 
+
+Serializers a default Active Model Serializers 
+```ruby
  # /app/serializers/post_serializer.rb
  class PostSerializer < ActionSerializer::Base
    attributes :id, :title, :content, :author_name
@@ -84,6 +89,7 @@ Check out also [Active Model Serializers](https://github.com/rails-api/active_mo
  end   
 ```
 
+Views for show/index are same as default ones.
 ```html
  # /app/views/posts/show.html.erb
 
@@ -100,11 +106,12 @@ Check out also [Active Model Serializers](https://github.com/rails-api/active_mo
     <% end %>
 </div>
 ```
+Forms just need to specify some params in form_for, everything else is as in default form.
 
 ```html
  # /app/views/posts/edit.html.erb
 
-<% form_for @post, url: post_path(@post), builder: SerializedFormBuilder do |f| %>
+<% form_for @post, builder: SerializedFormBuilder, url: post_path(@post), method: :put do |f| %>
     <%= f.text_field :title %>
     <%= f.text_field :content %>
 <% end %>
