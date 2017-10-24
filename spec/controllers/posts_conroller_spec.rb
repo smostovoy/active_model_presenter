@@ -1,8 +1,10 @@
 require 'rails_helper'
 
 describe PostsController, :type => :controller do
+  render_views
+
   context '#show' do
-    let!(:post) { Post.create(title: 'sfd') }
+    let!(:post) { Post.create(title: 'test title') }
     let(:params) do
       {
         id: post.id
@@ -17,6 +19,7 @@ describe PostsController, :type => :controller do
       it 'returns success' do
         subject
         expect(response).to be_success
+        expect(response.body).to include('test title')
       end
     end
   end

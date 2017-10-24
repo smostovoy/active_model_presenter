@@ -50,10 +50,14 @@ Check out also [Active Model Serializers](https://github.com/rails-api/active_mo
 ## Example
 
 ```ruby
-
  # /app/controllers/posts_controller.rb
  class PostsController < ApplicationController
    def show  
+     post = Post.find(params[:id])
+     @post = serialize(post)
+   end
+   
+   def edit  
      post = Post.find(params[:id])
      @post = serialize(post)
    end
@@ -95,6 +99,15 @@ Check out also [Active Model Serializers](https://github.com/rails-api/active_mo
       </div>  
     <% end %>
 </div>
+```
+
+```html
+ # /app/views/posts/edit.html.erb
+
+<% form_for @post, url: post_path(@post), builder: SerializedFormBuilder do |f| %>
+    <%= f.text_field :title %>
+    <%= f.text_field :content %>
+<% end %>
 ```
 
 ## Contributing
