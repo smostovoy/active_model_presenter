@@ -1,11 +1,11 @@
 require 'active_model_serializers'
 require 'hashie'
 
-require 'action_serializer/base'
-require 'action_serializer/model'
-require 'action_serializer/collection'
+require 'serialized_object/base'
+require 'serialized_object/model'
+require 'serialized_object/collection'
 
-module ActionSerializer
+module SerializedObject
   extend ActiveSupport::Concern
 
   included do
@@ -16,9 +16,9 @@ module ActionSerializer
 
   def serialize(object, serializer = nil)
     if object.is_a?(Array) || object.class.name == 'ActiveRecord::Relation'
-      @coll = ActionSerializer::Collection.new(object, serializer)
+      @coll = SerializedObject::Collection.new(object, serializer)
     else
-      @item = ActionSerializer::Model.create(object, serializer)
+      @item = SerializedObject::Model.create(object, serializer)
     end
   end
 end

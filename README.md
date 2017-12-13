@@ -1,53 +1,30 @@
-# Welcome to ActionSerializer
-
-ActionSerializer is a layer for Rails between Controller and View based on ActiveModelSerializer gem. 
-It's an implementation of an architecture which can be called as MVCS (Model-View-Controller-Serializer).
-Simplified flow is next:
+# SerializedObject
+Serialized Objects simplify your views and models just like Service Objects simplify your controllers/models.  
+SerializedObject is a small library that serializes any object to a hash/json and provides pseudo-object attributes access.  
+It's based on ActiveModelSerializer gem so you get all it's features.  
+It can be used as a layer for Rails between Controller and View to make data flow in 1 direction. 
 
 ![mvcs](/doc/mvc-to-mvcs.png)
 
-### Benefits:
-1. Standart place for a view-related logic
-2. View layer does not make DB queries. Data goes in 1 direction, like in API -> Frontend SPA app.
-3. Easy caching - just add `cache: true` in your serializer 
-4. Better testing - checking controller assings (full hash) gives much higher confidence
-5. DRY - Default AMS serializers support `has_many`, `belongs_to` and simple inheritance
+## Benefits:
 
-### Features
-1. Serialized object acts like a plain ruby object but can be converted to hash or json
-2. Based on time-tested AMS gem
-3. Compatible with default rails form helpers
-
-
-## Getting Started
-
-1. Add gem to you Gemfile
-    
+1. Everything is calculated only once. So you don't need to write things like
     ```ruby
-    gem 'action_serializer'
+    def foo
+      @foo ||= calculate('bar')
+    end
     ```
- 
-2. Call `serialize` in your action
-    
-    ```ruby
-    def show  
-      user = User.find(params[:id])
-      @user = serialize(user, UserSerializer)
-    end  
-    ```
+    Such objects can be useful in many cases.
+2. Serializers can be a standard place for a view(frontend)-related logic
+3. View layer will not make DB queries. Data goes in 1 direction, like in API -> Frontend SPA app.
+4. Easy caching - just add `cache: true` in your serializer 
+5. Better testing - checking controller assings (full hash) gives much higher confidence
+6. DRY - Default AMS serializers support `has_many`, `belongs_to` and simple inheritance
 
-   Method `serialize` returns `ActionSerializer::Model` object, which is compatible with rails forms  
-
-   Collections are handled same way.
-   
-   ```ruby
-   @users = serialize(users)
-   ```  
-     
-   Here `serialize` returns `ActionSerializer::Collection` object, which is compatible with pagination from `will_paginate` and `kaminari` gems.
-       
-
-Check out also [Active Model Serializers](https://github.com/rails-api/active_model_serializers/tree/v0.10.6) page about syntax for serializers.
+## Features
+1. Serialized object acts like a plain ruby object but can be converted to hash or json at any moment.
+2. Based on time-tested ActiveModelSerializer gem
+3. Collections are compatible with paginators like `will_paginate` and `kaminari` gems.
 
 ## Example
 
@@ -59,29 +36,24 @@ Method `serialize` does all the magic
      post = Post.find(params[:id])
      @post = serialize(post)
    end
-   
-   def edit  
-     post = Post.find(params[:id])
-     @post = serialize(post)
-   end
  end
 ``` 
 
-Serializers a default ActiveModelSerializer classes 
+Serializers are regular ActiveModelSerializer classes: 
 ```ruby
  # /app/serializers/post_serializer.rb
- class PostSerializer < ActionSerializer::Base
-   attributes :id, :title, :content, :author_name
+ class PostSerializer < SerializedObject::Base
+   attributes :id, :title, :content, :comments_count
      
    has_many :comments
      
-   def author_name
-     object.user.name
+   def comments_count
+     comments.count
    end
  end 
  
  # /app/serializers/comment_serializer.rb
- class CommentSerializer < ActionSerializer::Base
+ class CommentSerializer < SerializedObject::Base
    attributes :id, :message, :author_name
      
    def author_name
@@ -90,14 +62,14 @@ Serializers a default ActiveModelSerializer classes
  end   
 ```
 
-Views for show/index are same as default ones, but it can access only defined attributes.
+Views for show/index are same as default ones, but they can access only defined attributes.
 ```html
  # /app/views/posts/show.html.erb
 
 <h1><%= @post.title %></h1>
-<h2><%= @post.author_name %></h2>
 <div><%= @post.content %></div>
 
+<h2>Comments (<%= @post.comments_count %>): </h2>
 <div>
     <% @post.comments.each do |comment| %>
       <div>
@@ -107,22 +79,46 @@ Views for show/index are same as default ones, but it can access only defined at
     <% end %>
 </div>
 ```
-Forms just need to specify some params in form_for, everything else is as in default form.
 
-```html
- # /app/views/posts/edit.html.erb
+## Getting Started
 
-<% form_for @post, builder: SerializedFormBuilder, url: post_path(@post), method: :put do |f| %>
-    <%= f.text_field :title %>
-    <%= f.text_field :content %>
-<% end %>
-```
+1. Add gem to you Gemfile
+    
+    ```ruby
+    gem 'serialized_object'
+    ```
+ 
+2. Call `serialize` in your action
+    
+    ```ruby
+    def show  
+      user = User.find(params[:id])
+      @user = serialize(user, UserSerializer)
+    end  
+    ```
+
+   Method `serialize` returns `SerializedObject::Model` object.  
+
+   Collections are handled same way.
+   
+   ```ruby
+   @users = serialize(users)
+   ```  
+     
+   Here `serialize` returns `SerializedObject::Collection` object, which is compatible with paginators.
+       
+3. or use manual initializing:
+   ```ruby
+   serialized_user = SerializedObject::Model.create(user, UserSerializer)
+   ```
+
+Check out also [Active Model Serializers](https://github.com/rails-api/active_model_serializers/tree/v0.10.6) page about syntax for serializers.
 
 ## Contributing
 
-We encourage you to create issues and to contribute to ActionSerializer! Please discuss your ideas with the authors first.
+We encourage you to create issues and to contribute to SerializedObject! Please discuss your ideas with the authors first.
 
 
 ## License
 
-ActionSerializer is released under the [MIT License](http://www.opensource.org/licenses/MIT).
+SerializedObject is released under the [MIT License](http://www.opensource.org/licenses/MIT).

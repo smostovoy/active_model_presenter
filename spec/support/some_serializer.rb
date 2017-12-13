@@ -1,0 +1,2 @@
+class SomeSerializer < ActiveMode
+end

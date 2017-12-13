@@ -1,4 +1,4 @@
-module ActionSerializer
+module SerializedObject
   class Model < Hashie::Mash
     include Hashie::Extensions::Mash::KeepOriginalKeys
     include Hashie::Extensions::Mash::SafeAssignment
