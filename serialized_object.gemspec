@@ -1,13 +1,13 @@
 Gem::Specification.new do |s|
-  s.name        = 'serialized_object'
-  s.version     = '0.0.3'
+  s.name        = 'serialized_objects'
+  s.version     = '0.0.4'
   s.date        = '2017-07-30'
-  s.summary     = "serialized_object"
-  s.description = "serialized_object"
+  s.summary     = "serialized_objects"
+  s.description = "serialized_objects"
   s.authors     = ["Sergii Mostovyi"]
   s.email       = 'svmostovoy@gmail.com'
-  s.files       = ["lib/serialized_object.rb"]
-  s.homepage    = 'https://github.com/smostovoy/serialized_object'
+  s.files       = ["lib/serialized_objects.rb"]
+  s.homepage    = 'https://github.com/smostovoy/serialized_objects'
   s.license     = 'MIT'
 
   s.add_dependency "hashie", ">= 3.5.0"

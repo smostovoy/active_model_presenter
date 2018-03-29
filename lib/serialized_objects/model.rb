@@ -1,4 +1,4 @@
-module SerializedObject
+module SerializedObjects
   class Model < Hashie::Mash
     include Hashie::Extensions::Mash::KeepOriginalKeys
     include Hashie::Extensions::Mash::SafeAssignment

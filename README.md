@@ -1,6 +1,6 @@
-# SerializedObject
+# SerializedObjects
 Serialized Objects simplify your views and models just like Service Objects simplify your controllers/models.  
-SerializedObject is a small library that serializes any object to a hash/json and provides pseudo-object attributes access.  
+SerializedObjects is a small library that serializes any object to a hash/json and provides pseudo-object attributes access.  
 It's based on ActiveModelSerializer gem so you get all it's features.  
 It can be used as a layer for Rails between Controller and View to make data flow in 1 direction. 
 
@@ -42,7 +42,7 @@ Method `serialize` does all the magic
 Serializers are regular ActiveModelSerializer classes: 
 ```ruby
  # /app/serializers/post_serializer.rb
- class PostSerializer < SerializedObject::Base
+ class PostSerializer < SerializedObjects::Base
    attributes :id, :title, :content, :comments_count
      
    has_many :comments
@@ -53,7 +53,7 @@ Serializers are regular ActiveModelSerializer classes:
  end 
  
  # /app/serializers/comment_serializer.rb
- class CommentSerializer < SerializedObject::Base
+ class CommentSerializer < SerializedObjects::Base
    attributes :id, :message, :author_name
      
    def author_name
@@ -85,7 +85,7 @@ Views for show/index are same as default ones, but they can access only defined 
 1. Add gem to you Gemfile
     
     ```ruby
-    gem 'serialized_object'
+    gem 'serialized_objects'
     ```
  
 2. Call `serialize` in your action
@@ -97,7 +97,7 @@ Views for show/index are same as default ones, but they can access only defined 
     end  
     ```
 
-   Method `serialize` returns `SerializedObject::Model` object.  
+   Method `serialize` returns `SerializedObjects::Model` object.  
 
    Collections are handled same way.
    
@@ -105,20 +105,20 @@ Views for show/index are same as default ones, but they can access only defined 
    @users = serialize(users)
    ```  
      
-   Here `serialize` returns `SerializedObject::Collection` object, which is compatible with paginators.
+   Here `serialize` returns `SerializedObjects::Collection` object, which is compatible with paginators.
        
 3. or use manual initializing:
    ```ruby
-   serialized_user = SerializedObject::Model.create(user, UserSerializer)
+   serialized_user = SerializedObjects::Model.create(user, UserSerializer)
    ```
 
 Check out also [Active Model Serializers](https://github.com/rails-api/active_model_serializers/tree/v0.10.6) page about syntax for serializers.
 
 ## Contributing
 
-We encourage you to create issues and to contribute to SerializedObject! Please discuss your ideas with the authors first.
+We encourage you to create issues and to contribute to SerializedObjects! Please discuss your ideas with the authors first.
 
 
 ## License
 
-SerializedObject is released under the [MIT License](http://www.opensource.org/licenses/MIT).
+SerializedObjects is released under the [MIT License](http://www.opensource.org/licenses/MIT).
