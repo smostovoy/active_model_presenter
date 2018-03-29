@@ -2,27 +2,27 @@
 Serialized Objects simplify your views and models just like Service Objects simplify your controllers/models.  
 SerializedObjects is a small library that serializes any object to a hash/json and provides pseudo-object attributes access.  
 It's based on ActiveModelSerializer gem so you get all it's features.  
-It can be used as a layer for Rails between Controller and View to make data flow in 1 direction. 
+It can be used as a layer for Rails between Controller and View to make data to flow in 1 direction. 
 
 ![mvcs](/doc/mvc-to-mvcs.png)
 
 ## Benefits:
 
-1. Everything is calculated only once. So you don't need to write things like
+1. Serializers can be a standard place for a view/frontend/response-related logic
+2. View layer will not make DB queries. Data goes in 1 direction, like in API -> Frontend SPA app.
+3. Easy caching - just add `cache: true` in your serializer 
+4. Better testing - checking controller assings (full hash) gives much higher confidence
+5. DRY - Default AMS serializers support `has_many`, `belongs_to` and simple inheritance
+6. Everything is calculated only once. So you don't need to write things like
     ```ruby
     def foo
-      @foo ||= calculate('bar')
+      @foo ||= 2**100
     end
     ```
     Such objects can be useful in many cases.
-2. Serializers can be a standard place for a view(frontend)-related logic
-3. View layer will not make DB queries. Data goes in 1 direction, like in API -> Frontend SPA app.
-4. Easy caching - just add `cache: true` in your serializer 
-5. Better testing - checking controller assings (full hash) gives much higher confidence
-6. DRY - Default AMS serializers support `has_many`, `belongs_to` and simple inheritance
-
+    
 ## Features
-1. Serialized object acts like a plain ruby object but can be converted to hash or json at any moment.
+1. Serialized object acts like a plain static ruby object but can be converted to hash or json at any moment.
 2. Based on time-tested ActiveModelSerializer gem
 3. Collections are compatible with paginators like `will_paginate` and `kaminari` gems.
 
