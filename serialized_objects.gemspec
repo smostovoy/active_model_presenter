@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.license     = 'MIT'
 
   s.add_dependency "hashie", ">= 3.5.0"
-  s.add_dependency "active_model_serializers", "= 0.10.5"
+  s.add_dependency "active_model_serializers", "= 0.10.7"
 
   s.add_development_dependency "bundler", "~> 1.3"
   s.add_development_dependency "rspec"

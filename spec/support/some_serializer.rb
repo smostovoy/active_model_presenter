@@ -1,2 +1,0 @@
-class SomeSerializer < ActiveMode
-end
