@@ -109,7 +109,7 @@ Views for show/index are same as default ones, but they can access only defined 
        
 3. or use manual initializing:
    ```ruby
-   serialized_user = ActiveModelPresenter::Model.create(user, UserSerializer)
+   serialized_user = ActiveModelPresenter::Model.new(user, UserSerializer)
    ```
 
 Check out also [active_model_serializers](https://github.com/rails-api/active_model_serializers/tree/v0.10.6) page about syntax for serializers.

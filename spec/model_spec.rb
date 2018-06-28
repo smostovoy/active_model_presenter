@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe ActiveModelPresenter::Model do
-  subject { described_class.build(Item.new, ItemSerializer) }
+  subject { described_class.new(Item.new, ItemSerializer) }
 
   it 'allows to call attributes as methods' do
     expect(subject.name).to eq('test')
