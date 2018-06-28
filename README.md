@@ -1,48 +1,46 @@
-# SerializedObjects
-Serialized Objects simplify your views and models just like Service Objects simplify your controllers/models.  
-SerializedObjects is a small library that serializes any object to a hash/json and provides pseudo-object attributes access.  
-It's based on ActiveModelSerializer gem so you get all it's features.  
+# ActiveModelPresenter
+Presenters and Model-View-Presenter (MVP) is the second most useful pattern after Service Objects to simplify your medium-to-large app.  
+ActiveModelPresenter is a small gem that transforms ActiveRecord models into simple decorated objects that you can use to pass data for a JSON or a regular View rendering.  
+It's based on Rails' **active_model_serializers** gem (AMS) so you get all it's features without creating any new type of files.  
 It can be used as a layer for Rails between Controller and View to make data to flow in 1 direction. 
 
 ![mvcs](/doc/mvc-to-mvcs.png)
+    
+## Features
+1. Presenter acts like a plain static ruby object but can be converted to a hash or a json at any moment.
+2. Based on time-tested _active_model_serializers_ gem
+3. Collections are compatible with paginators like `will_paginate` and `kaminari` gems.
 
 ## Benefits:
-
-1. Serializers can be a standard place for a view/frontend/response-related logic
+1. Presenters (serializers) can be an additional layer for a view/frontend/api-related logic
 2. View layer will not make DB queries. Data goes in 1 direction, like in API -> Frontend SPA app.
-3. Easy caching - just add `cache: true` in your serializer 
-4. Better testing - checking controller assings (full hash) gives much higher confidence
-5. DRY - Default AMS serializers support `has_many`, `belongs_to` and simple inheritance
-6. Everything is calculated only once. So you don't need to write things like
+3. Easy caching - just add `cache: true` in your serializer. (Read AMS docs on this) 
+4. Better testing - it's possible to unit-test a Presenter and check all attributes
+5. DRY - Same as Service Object they allow you to keep domain-related logic in 1 place
+6. AMS serializers already support `has_many`, `belongs_to` and inheritance
+7. Everything is calculated only once. So you don't need to write memoizations like this:
     ```ruby
     def foo
       @foo ||= 2**100
     end
     ```
-    Such objects can be useful in many cases.
     
-## Features
-1. Serialized object acts like a plain static ruby object but can be converted to hash or json at any moment.
-2. Based on time-tested ActiveModelSerializer gem
-3. Collections are compatible with paginators like `will_paginate` and `kaminari` gems.
-
 ## Example
-
-Method `serialize` does all the magic
+Method `present` does all the magic
 ```ruby
  # /app/controllers/posts_controller.rb
  class PostsController < ApplicationController
    def show  
      post = Post.find(params[:id])
-     @post = serialize(post)
+     @post = present(post)
    end
  end
 ``` 
 
-Serializers are regular ActiveModelSerializer classes: 
+Presenters are regular ActiveModelSerializer classes: 
 ```ruby
  # /app/serializers/post_serializer.rb
- class PostSerializer < SerializedObjects::Base
+ class PostSerializer < ActiveModelPresenter::Base
    attributes :id, :title, :content, :comments_count
      
    has_many :comments
@@ -53,7 +51,7 @@ Serializers are regular ActiveModelSerializer classes:
  end 
  
  # /app/serializers/comment_serializer.rb
- class CommentSerializer < SerializedObjects::Base
+ class CommentSerializer < ActiveModelPresenter::Base
    attributes :id, :message, :author_name
      
    def author_name
@@ -85,40 +83,40 @@ Views for show/index are same as default ones, but they can access only defined 
 1. Add gem to you Gemfile
     
     ```ruby
-    gem 'serialized_objects'
+    gem 'active_model_presenter'
     ```
  
-2. Call `serialize` in your action
+2. Call `present` in your action
     
     ```ruby
     def show  
       user = User.find(params[:id])
-      @user = serialize(user, UserSerializer)
+      @user = present(user, UserSerializer)
     end  
     ```
 
-   Method `serialize` returns `SerializedObjects::Model` object.  
+   Method `present` returns a `ActiveModelPresenter::Model` object class.  
 
    Collections are handled same way.
    
    ```ruby
-   @users = serialize(users)
+   @users = present(users)
    ```  
      
-   Here `serialize` returns `SerializedObjects::Collection` object, which is compatible with paginators.
+   Here `present` returns a `ActiveModelPresenter::Collection` object, which is compatible with paginators.
        
 3. or use manual initializing:
    ```ruby
-   serialized_user = SerializedObjects::Model.create(user, UserSerializer)
+   serialized_user = ActiveModelPresenter::Model.create(user, UserSerializer)
    ```
 
-Check out also [Active Model Serializers](https://github.com/rails-api/active_model_serializers/tree/v0.10.6) page about syntax for serializers.
+Check out also [active_model_serializers](https://github.com/rails-api/active_model_serializers/tree/v0.10.6) page about syntax for serializers.
 
 ## Contributing
 
-We encourage you to create issues and to contribute to SerializedObjects! Please discuss your ideas with the authors first.
+We encourage you to create issues and to contribute to ActiveModelPresenter! Please discuss your ideas with the authors first.
 
 
 ## License
 
-SerializedObjects is released under the [MIT License](http://www.opensource.org/licenses/MIT).
+ActiveModelPresenter is released under the [MIT License](http://www.opensource.org/licenses/MIT).

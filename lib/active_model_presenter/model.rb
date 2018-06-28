@@ -1,12 +1,12 @@
-module SerializedObjects
+module ActiveModelPresenter
   class Model < Hashie::Mash
     include Hashie::Extensions::Mash::KeepOriginalKeys
     include Hashie::Extensions::Mash::SafeAssignment
 
-    def self.create(item, serializer=nil)
+    def self.new(item, serializer=nil)
       serializer ||= "::#{item.class.name}Serializer".constantize
       hash = serializer.new(item).to_h
-      new(hash)
+      super(hash)
     end
 
     def is_a?(klass)

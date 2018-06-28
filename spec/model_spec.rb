@@ -1,10 +1,14 @@
 require 'spec_helper'
 
-describe SerializedObjects::Model do
-  subject { described_class.create(Item.new, ItemSerializer) }
+describe ActiveModelPresenter::Model do
+  subject { described_class.build(Item.new, ItemSerializer) }
 
   it 'allows to call attributes as methods' do
     expect(subject.name).to eq('test')
+  end
+
+  it 'allows to call custom attributes as methods' do
+    expect(subject.bar).to eq('bar value')
   end
 
   it 'raises exception when attribute does not exist' do
