@@ -1,4 +1,6 @@
 # ActiveModelPresenter
+[![Build Status](https://travis-ci.org/smostovoy/active_model_presenter.svg?branch=master)](https://travis-ci.org/smostovoy/active_model_presenter)
+
 Presenters and Model-View-Presenter (MVP) is the second most useful pattern after Service Objects to simplify your medium-to-large app.  
 ActiveModelPresenter is a small gem that transforms ActiveRecord models into simple decorated objects that you can use to pass data for a JSON or a regular View rendering.  
 It's based on Rails' **active_model_serializers** gem (AMS) so you get all it's features without creating any new type of files.  
