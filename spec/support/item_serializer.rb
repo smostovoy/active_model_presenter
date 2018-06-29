@@ -1,4 +1,4 @@
-class ItemSerializer < ActiveModelPresenter::Base
+class ItemSerializer < ActiveModel::Serializer
   attributes :name, :bar
 
   def bar
