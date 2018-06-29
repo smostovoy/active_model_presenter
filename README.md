@@ -28,13 +28,12 @@ It can be used as a layer for Rails between Controller and View to make data to 
     ```
     
 ## Example
-Method `present` does all the magic
 ```ruby
  # /app/controllers/posts_controller.rb
  class PostsController < ApplicationController
    def show  
      post = Post.find(params[:id])
-     @post = present(post)
+     @post = present(post, PostSerializer)
    end
  end
 ``` 
