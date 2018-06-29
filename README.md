@@ -1,8 +1,8 @@
 # ActiveModelPresenter
 [![Build Status](https://travis-ci.org/smostovoy/active_model_presenter.svg?branch=master)](https://travis-ci.org/smostovoy/active_model_presenter)
 
-Presenters and Model-View-Presenter (MVP) is the second most useful pattern after Service Objects to simplify your medium-to-large app.  
-ActiveModelPresenter is a small gem that transforms ActiveRecord models into simple decorated objects that you can use to pass data for a JSON or a regular View rendering.  
+Presenters and Model-View-Presenter (MVP) is the second most useful pattern after Service Objects to simplify your rails app.  
+**ActiveModelPresenter** is a small gem that transforms ActiveRecord models into simple decorated objects that you can use to pass data for a JSON or a regular View rendering.  
 It's based on Rails' **active_model_serializers** gem (AMS) so you get all it's features without creating any new type of files.  
 It can be used as a layer for Rails between Controller and View to make data to flow in 1 direction. 
 
@@ -14,11 +14,11 @@ It can be used as a layer for Rails between Controller and View to make data to 
 3. Collections are compatible with paginators like `will_paginate` and `kaminari` gems.
 
 ## Benefits:
-1. Presenters (serializers) can be an additional layer for a view/frontend/api-related logic
-2. View layer will not make DB queries. Data goes in 1 direction, like in API -> Frontend SPA app.
-3. Easy caching - just add `cache: true` in your serializer. (Read AMS docs on this) 
+1. Presenters (serializers) can be an additional encapsulation layer for a view/frontend/api-related logic
+2. Unidirectional data flow -  DB queries will not happen from a View layer (it means caching a view will not make much sense)
+3. Easy caching - just add `cache: true` in your serializer. (Read AMS docs for more info) 
 4. Better testing - it's possible to unit-test a Presenter and check all attributes
-5. DRY - Same as Service Object they allow you to keep domain-related logic in 1 place
+5. DRY - Same as Service Objects they allow you to keep domain-related logic in 1 place and have an easy access to it
 6. AMS serializers already support `has_many`, `belongs_to` and inheritance
 7. Everything is calculated only once. So you don't need to write memoizations like this:
     ```ruby
@@ -42,7 +42,7 @@ Method `present` does all the magic
 Presenters are regular ActiveModelSerializer classes: 
 ```ruby
  # /app/serializers/post_serializer.rb
- class PostSerializer < ActiveModelPresenter::Base
+ class PostSerializer < ActiveModel::Serializer
    attributes :id, :title, :content, :comments_count
      
    has_many :comments
@@ -53,7 +53,7 @@ Presenters are regular ActiveModelSerializer classes:
  end 
  
  # /app/serializers/comment_serializer.rb
- class CommentSerializer < ActiveModelPresenter::Base
+ class CommentSerializer < ActiveModel::Serializer
    attributes :id, :message, :author_name
      
    def author_name
@@ -109,7 +109,7 @@ Views for show/index are same as default ones, but they can access only defined 
        
 3. or use manual initializing:
    ```ruby
-   serialized_user = ActiveModelPresenter::Model.new(user, UserSerializer)
+   @user = ActiveModelPresenter::Model.new(user, UserSerializer)
    ```
 
 Check out also [active_model_serializers](https://github.com/rails-api/active_model_serializers/tree/v0.10.6) page about syntax for serializers.
