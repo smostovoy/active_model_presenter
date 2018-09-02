@@ -15,9 +15,9 @@ module ActiveModelPresenter
 
   def present(object, serializer = nil)
     if object.is_a?(Array) || object.class.name == 'ActiveRecord::Relation'
-      @coll = active_model_presenter::Collection.new(object, serializer)
+      @coll = ActiveModelPresenter::Collection.new(object, serializer)
     else
-      @item = ActiveModelPresenter::Model.create(object, serializer)
+      @item = ActiveModelPresenter::Model.new(object, serializer)
     end
   end
 end

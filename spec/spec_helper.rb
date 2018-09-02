@@ -20,6 +20,7 @@
 require_relative '../lib/active_model_presenter'
 require_relative 'support/item'
 require_relative 'support/item_serializer'
+require_relative 'support/item_presenter'
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate

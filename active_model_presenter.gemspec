@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'active_model_presenter'
-  s.version     = '0.0.5'
+  s.version     = '0.1.1'
   s.date        = '2017-07-30'
   s.summary     = "ActiveModelSerializers-based presenters"
   s.required_ruby_version = '>= 2.1'
@@ -16,6 +16,5 @@ It can be used as a layer for Rails between Controller and View to make data to 
   s.homepage    = 'https://github.com/smostovoy/active_model_presenter'
   s.license     = 'MIT'
 
-  s.add_dependency "hashie", ">= 3.5.0"
   s.add_dependency "active_model_serializers", "~> 0.10.7"
 end

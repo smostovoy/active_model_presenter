@@ -1,38 +1,23 @@
 module ActiveModelPresenter
-  class Model < Hashie::Mash
-    include Hashie::Extensions::Mash::KeepOriginalKeys
-    include Hashie::Extensions::Mash::SafeAssignment
-
-    def self.new(item, serializer=nil)
+  class Model < OpenStruct
+    def self.new(item, params={})
+      serializer = params[:serializer]
       serializer ||= "::#{item.class.name}Serializer".constantize
-      hash = serializer.new(item).to_h
+      hash = serializer.new(item).serializable_hash(nil, params.slice(:fields))
       super(hash)
-    end
-
-    def is_a?(klass)
-      return false if klass == Hash # Rails Form treats hashes differently from models
-      super
     end
 
     def to_param
       id.to_s
     end
 
-    ### implementation of Hashie::Extensions::StrictKeyAccess for Mash + a change for rails form methods
-    # https://github.com/intridea/hashie/issues/60#issuecomment-158590985
-    def [](key)
-      return nil unless key.to_s['came_from_user'].nil? # rails form builder tries to access :some_attr_came_from_user
-      fetch(key)
+    def attributes
+      to_h.keys
     end
 
-    def key(value)
-      result = super
-      if result.nil? && (!key?(result) || self[result] != value)
-        raise KeyError, "key not found with value of #{value.inspect}"
-      else
-        result
-      end
+    def method_missing(meth, *args)
+      raise NoMethodError, "no #{meth} member set yet" unless respond_to?(meth)
+      super
     end
-    ######### End #########
   end
 end

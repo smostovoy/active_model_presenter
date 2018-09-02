@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe ActiveModelPresenter::Model do
-  subject { described_class.new(Item.new) }
+describe ItemPresenter do
+  subject { described_class.show(Item.new) }
 
   it 'allows to call attributes as methods' do
     expect(subject.name).to eq('test')
@@ -20,20 +20,18 @@ describe ActiveModelPresenter::Model do
   end
 
   describe '#inspect' do
-    subject { described_class.new(Item.new).inspect }
+    subject { described_class.show(Item.new).inspect }
 
-    it { is_expected.to start_with('#<ActiveModelPresenter::Model') }
+    it { is_expected.to start_with('#<ItemPresenter') }
   end
 
-  describe '#attributes' do
-    subject { described_class.new(Item.new).attributes }
+  describe '#is_a?' do
+    subject { described_class.show(Item.new).method(:is_a?) }
 
-    it { is_expected.to eq([:name, :bar]) }
-
-    context 'when fields are filtered' do
-      subject { described_class.new(Item.new, {fields: [:bar]}).attributes }
-
-      it { is_expected.to eq([:bar]) }
+    it do
+      expect(subject.(ItemPresenter)).to be true
+      expect(subject.(ActiveModelPresenter::Model)).to be true
+      expect(subject.(Hash)).to be false
     end
   end
 end
