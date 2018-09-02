@@ -30,25 +30,17 @@ Everything is calculated only once. So you don't need to write memoizations like
 
     
 ## Example
-```ruby
- # /app/controllers/posts_controller.rb
- class PostsController < ApplicationController
-   def show  
-     post = Post.find(params[:id])
-     @post = PostPresenter.show(post)
-   end
- end
-``` 
+
 Presenter: 
 ```ruby
  # /app/presenters/post_presenter.rb
- class PostSerializer < ActiveModelPresenter::Base     
+ class PostPresenter < ActiveModelPresenter::Base     
    def show(post)
-     new(post, fields: [:id, :title, :content, :comments_count])
+     present(post, fields: [:id, :title, :content, :comments_count, :comments])
    end
    
-   def show_full(post)
-     new(post, fields: [:id, :title, :content, :comments_count, :comments])
+   def list(posts)
+     present(posts, fields: [:id, :title, :content, :comments_count])
    end
  end 
 ```
@@ -76,6 +68,17 @@ Presenters are using regular ActiveModelSerializer classes:
  end   
 ```
 
+Controller
+```ruby
+ # /app/controllers/posts_controller.rb
+ class PostsController < ApplicationController
+   def show  
+     post = Post.find(params[:id])
+     @post = PostPresenter.show(post)
+   end
+ end
+```
+`
 Views for show/index are same as default ones, but they can access only defined attributes.
 ```html
  # /app/views/posts/show.html.erb

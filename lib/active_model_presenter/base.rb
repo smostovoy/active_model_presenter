@@ -10,9 +10,13 @@ module ActiveModelPresenter
     end
 
     def self.new(item, params={})
+      # fields = params.slice(:fields)
       serializer = params[:serializer]
       serializer ||= "::#{item.class.name}Serializer".constantize
       hash = serializer.new(item).serializable_hash(nil, params.slice(:fields))
+      # (fields &(:_reflections)).each do |association_field|
+      #   hash[association_field] = ActiveModelPresenter::Collection.new(hash[association_field], self)
+      # end
       super(hash)
     end
 
