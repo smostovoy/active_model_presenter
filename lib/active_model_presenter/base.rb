@@ -1,5 +1,14 @@
 module ActiveModelPresenter
-  class Model < OpenStruct
+  class Base < OpenStruct
+
+    def self.present(object, params={})
+      if object.is_a?(Array) || object.class.name == 'ActiveRecord::Relation'
+        ActiveModelPresenter::Collection.new(object, self, params)
+      else
+        new(object, params)
+      end
+    end
+
     def self.new(item, params={})
       serializer = params[:serializer]
       serializer ||= "::#{item.class.name}Serializer".constantize

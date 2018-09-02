@@ -1,5 +1,9 @@
-class ItemPresenter < ActiveModelPresenter::Model
+class ItemPresenter < ActiveModelPresenter::Base
   def self.show(item)
-    new(item, {fields: [:name, :bar]})
+    present(item, {fields: [:name, :bar]})
+  end
+
+  def self.list(items)
+    present(items, {fields: [:name, :bar]})
   end
 end

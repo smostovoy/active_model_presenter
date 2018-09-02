@@ -42,7 +42,7 @@ Everything is calculated only once. So you don't need to write memoizations like
 Presenter: 
 ```ruby
  # /app/presenters/post_presenter.rb
- class PostSerializer < ActiveModelPresenter::Model     
+ class PostSerializer < ActiveModelPresenter::Base     
    def show(post)
      new(post, fields: [:id, :title, :content, :comments_count])
    end

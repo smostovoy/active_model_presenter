@@ -30,7 +30,7 @@ describe ItemPresenter do
 
     it do
       expect(subject.(ItemPresenter)).to be true
-      expect(subject.(ActiveModelPresenter::Model)).to be true
+      expect(subject.(ActiveModelPresenter::Base)).to be true
       expect(subject.(Hash)).to be false
     end
   end
