@@ -18,9 +18,11 @@
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
 require_relative '../lib/active_model_presenter'
-require_relative 'support/item'
-require_relative 'support/item_serializer'
-require_relative 'support/item_presenter'
+require_relative 'support/post'
+require_relative 'support/post_serializer'
+require_relative 'support/post_presenter'
+require_relative 'support/comment'
+require_relative 'support/comment_serializer'
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate

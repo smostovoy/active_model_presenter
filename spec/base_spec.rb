@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe ActiveModelPresenter::Base do
-  subject { described_class.new(Item.new) }
+  subject { described_class.new(Post.new) }
 
   it 'allows to call attributes as methods' do
     expect(subject.name).to eq('test')
@@ -20,26 +20,26 @@ describe ActiveModelPresenter::Base do
   end
 
   describe '#inspect' do
-    subject { described_class.new(Item.new).inspect }
+    subject { described_class.new(Post.new).inspect }
 
     it { is_expected.to start_with('#<ActiveModelPresenter::Base') }
   end
 
   describe '#attributes' do
-    subject { described_class.new(Item.new).attributes }
+    subject { described_class.new(Post.new).attributes }
 
     it { is_expected.to eq([:name, :bar]) }
 
     context 'when fields are filtered' do
-      subject { described_class.new(Item.new, {fields: [:bar]}).attributes }
+      subject { described_class.new(Post.new, {fields: [:bar]}).attributes }
 
       it { is_expected.to eq([:bar]) }
     end
   end
 
   describe '.present' do
-    context 'when items are multiple' do
-      subject { described_class.present([Item.new, Item.new]) }
+    context 'when posts are multiple' do
+      subject { described_class.present([Post.new, Post.new], [:bar]) }
 
       it 'returns a collection' do
         expect(subject.class).to eq(ActiveModelPresenter::Collection)

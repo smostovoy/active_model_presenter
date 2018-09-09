@@ -1,10 +1,10 @@
 require 'spec_helper'
 
 describe ActiveModelPresenter::Collection do
-  subject { described_class.new([model, model2], ItemPresenter, {serializer: ItemSerializer}) }
+  subject { described_class.new([model, model2], PostPresenter, {serializer: PostSerializer}) }
 
-  let(:model) { Item.new }
-  let(:model2) { Item.new }
+  let(:model) { Post.new }
+  let(:model2) { Post.new }
 
   it 'returns an array' do
     expect(subject[0].name).to eq('test')

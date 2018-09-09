@@ -1,4 +1,4 @@
-class ItemSerializer < ActiveModel::Serializer
+class PostSerializer < ActiveModel::Serializer
   attributes :name, :bar
 
   def bar
