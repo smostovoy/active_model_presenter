@@ -3,18 +3,18 @@
 
 Have you had a problem that it's impossible to understand what methods/attributes are called in your Views?
 With ActiveModelPresenter you will have a full control of data that is exposed to views.
-Presenters and Model-View-Presenter (MVP) is the second most useful pattern after Service Objects to improve supportability of your rails app. 
+Presenters (Model-View-Presenter, Clean Architecture) is one of the most useful patterns to improve supportability of your rails app. 
 
 ![mvcs](/doc/mvc-to-mvcs.png)
 
 ## Benefits:
 1. List of exposed fields is explicitly defined
-2. Presenters (serializers) can be an additional encapsulation layer for a view/frontend/api-related logic
-3. Makes you 1 step closer to exposing a JSON API or allows you to DRY if you already do.
-4. Better testing - it's possible to unit-test a Presenter and check all attributes
+2. Presenters (serializers) can be an additional isolation layer for a view/frontend/api-related logic
+3. Makes you 1 step closer to exposing a JSON API or allows you to DRY your code if you already do.
+4. Easier testing - it's possible to unit-test a Presenter and check all attributes instead of greping an html.
 5. DRY - Same as Service Objects they allow you to keep domain-related logic in 1 place and have an easy access to it
-6. All queries and calculations now will happen in a presenter so no more crazy rendering time.
-Everything is calculated only once. So you don't need to write memoizations like `@foo ||= 2**100`. It means caching a view will not make much sense
+6. All queries and calculations happen in a presenter so no more crazy rendering time.
+7. Everything is calculated only once. So you don't need to write memoizations like `@foo ||= 2**100`. It means caching a view will not make much sense
 
 ## Features
 1. Presenter acts like a plain static ruby object but can be converted to a hash or a json at any moment.
@@ -22,11 +22,40 @@ Everything is calculated only once. So you don't need to write memoizations like
 3. Based on time-tested _active_model_serializers_ gem
 4. Collections are compatible with paginators like `will_paginate` and `kaminari` gems.
 
-## Main ActiveModelSerializers Features that are utilized by a presenter
+## Main ActiveModelSerializers Features that are utilized by this presenter
 1. fields filtering - serialize/present only a subset of attributes that are listed in a serializer
-2. `has_many`, `belongs_to` and other relations
-3. ability to override/extend methods from a model
-4. Caching - just add `cache: true` in your serializer. Just think about cache invalidation strategy (Read AMS docs for more info) 
+2. ability to override/extend methods from a model
+4. Caching - just add `cache: true` in your serializer. It checkes an `updated_at` attribute to refresh
+
+## Getting Started
+
+1. Add the gem name to your Gemfile
+    
+    ```ruby
+    gem 'active_model_presenter'
+    ```
+2. Define the  
+ 
+2. Call presenter in your action
+    
+    ```ruby
+    def show  
+      user = User.find(params[:id])
+      @user = UserPresenter.show(user)
+    end  
+    ```
+
+   Collections are handled in a same way.
+   
+   ```ruby
+   @users = UserPresenter.list(users)
+   ```  
+     
+   Here presenter returns a `ActiveModelPresenter::Collection` object, which is compatible with paginators.
+       
+   ```
+
+See more information about serializers [here](https://github.com/rails-api/active_model_serializers/tree/v0.10.6) about serializers syntax.
 
     
 ## Example
@@ -36,16 +65,19 @@ Presenter:
  # /app/presenters/post_presenter.rb
  class PostPresenter < ActiveModelPresenter::Base     
    def show(post)
-     present(post, fields: [:id, :title, :content, :comments_count, :comments])
+     present(post, [:id, :title, :content, :comments_count]) do |result, model|
+       result.comments = present(model.comments, [:message, :author_name])
+     end
    end
    
    def list(posts)
-     present(posts, fields: [:id, :title, :content, :comments_count])
+     present(posts, [:id, :title, :content, :comments_count])
    end
  end 
 ```
+`present` supports a block where you can make extend your presented object.
 
-Presenters are using regular ActiveModelSerializer classes: 
+Presenters are using regular ActiveModelSerializer classes, like these: 
 ```ruby
  # /app/serializers/post_serializer.rb
  class PostSerializer < ActiveModel::Serializer
@@ -68,7 +100,7 @@ Presenters are using regular ActiveModelSerializer classes:
  end   
 ```
 
-Controller
+Controller:
 ```ruby
  # /app/controllers/posts_controller.rb
  class PostsController < ApplicationController
@@ -97,34 +129,13 @@ Views for show/index are same as default ones, but they can access only defined 
 </div>
 ```
 
-## Getting Started
-
-1. Add the gem name to your Gemfile
-    
-    ```ruby
-    gem 'active_model_presenter'
-    ```
- 
-2. Call presenter in your action
-    
-    ```ruby
-    def show  
-      user = User.find(params[:id])
-      @user = UserPresenter.show(user)
-    end  
-    ```
-
-   Collections are handled same way.
-   
-   ```ruby
-   @users = UserPresenter.list(users)
-   ```  
-     
-   Here presenter returns a `ActiveModelPresenter::Collection` object, which is compatible with paginators.
-       
-   ```
-
-See more information about serializers [here](https://github.com/rails-api/active_model_serializers/tree/v0.10.6) page about syntax for serializers.
+## Syntax
+Method `present` accepts 3 attributes
+    1. Model or an object that inherits `ActiveModelSerializers::Model`
+    2. Array of fields to present. You can set it to `nil` to present all fields but it's not recommended.
+    3. Hash of params for serialization and for serializer instance. Available:
+        1.1 `instance_options: {foo: :bar}`. It will be available in the serializer methods as `instance_options`
+         
 
 ## Contributing
 

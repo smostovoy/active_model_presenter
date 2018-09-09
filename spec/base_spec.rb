@@ -28,7 +28,7 @@ describe ActiveModelPresenter::Base do
   describe '#attributes' do
     subject { described_class.new(Post.new).attributes }
 
-    it { is_expected.to eq([:name, :bar]) }
+    it { is_expected.to eq([:name, :bar, :instance_options_check]) }
 
     context 'when fields are filtered' do
       subject { described_class.new(Post.new, {fields: [:bar]}).attributes }
@@ -38,12 +38,22 @@ describe ActiveModelPresenter::Base do
   end
 
   describe '.present' do
-    context 'when posts are multiple' do
+    context 'when items are multiple' do
       subject { described_class.present([Post.new, Post.new], [:bar]) }
 
       it 'returns a collection' do
         expect(subject.class).to eq(ActiveModelPresenter::Collection)
         expect(subject.first.class).to eq(ActiveModelPresenter::Base)
+      end
+    end
+
+    context 'when item is single' do
+      context 'when instance_options is passed' do
+        subject { described_class.present(Post.new, [:instance_options_check], instance_options: {attr: :one}) }
+
+        it 'passes instance_options_check correctly' do
+          expect(subject.instance_options_check).to eq({attr: :one})
+        end
       end
     end
   end

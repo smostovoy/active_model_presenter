@@ -11,13 +11,13 @@ module ActiveModelPresenter
     end
 
     def self.new(model, params={}, &block)
-      fields = params.slice(:fields)
+      instance_options = params.delete(:instance_options) || {}
       # nested_fields = fields.delete_if do |field|
       #   field.is_a? Hash
       # end
       serializer = params[:serializer]
       serializer ||= "::#{model.class.name}Serializer".constantize
-      hash = serializer.new(model).serializable_hash(nil, fields)
+      hash = serializer.new(model, instance_options).serializable_hash(params.slice(:key_transform), params.slice(:fields))
       # (fields &(:_reflections)).each do |association_field|
       #   hash[association_field] = ActiveModelPresenter::Collection.new(hash[association_field], self)
       # end
